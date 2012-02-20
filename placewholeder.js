@@ -12,10 +12,8 @@
                     + '">'
                 + placeholderText +
             '</div>')
-                // Only works with clicks so far.
-                .click(function(){
-                    var $placewholeder = $(this);
-                    $placewholeder.hide();
+                .click(function() {
+                    $(this).hide();
                     $input.focus();
                 })
         );   
@@ -28,8 +26,14 @@
             if ($input.attr('placeholder')){
                 initOverlay($input);
 
+                var curOverlay = $('#placewholeder-overlay-' + $input.attr('id'));
+
                 $input.blur(function() {
-                    $('#placewholeder-overlay-' + $input.attr('id')).show();
+                    curOverlay.show();
+                });
+
+                $input.focus(function() {
+                    curOverlay.hide();
                 });
             }
         });
