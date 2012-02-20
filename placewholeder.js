@@ -29,7 +29,8 @@
                 var curOverlay = $('#placewholeder-overlay-' + $input.attr('id'));
 
                 $input.blur(function() {
-                    curOverlay.show();
+                    if (!$input.val())
+                        curOverlay.show();
                 });
 
                 $input.focus(function() {
