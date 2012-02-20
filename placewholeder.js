@@ -1,13 +1,11 @@
 (function(){
-    var overlayCount = 0;
-
     var initOverlay = function($input) {
-        overlayCount++;
         var placeholderText = $input.attr('placeholder');
         $input.parent().append(
-            $('<div id="placewholeder-overlay-' + overlayCount + '"'
+            $('<div id="placewholeder-overlay-' + $input.attr('id') + '"'
                 + 'class="placewholeder"'
                 + 'style="position: absolute;'
+                    + 'display: block;'
                     + 'z-index: 2;'
                     + 'left: ' + $input.position().left + ';'
                     + 'top: ' + $input.position().top + ';'
@@ -16,7 +14,7 @@
             '</div>')
                 .click(function(){
                     var $placewholeder = $(this);
-                    $placewholeder.css('display',  'none');  //change this to remove?
+                    $placewholeder.hide();
                     $input.focus();
                 })
         );   
@@ -30,7 +28,7 @@
                 initOverlay($input);
 
                 $input.blur(function() {
-                    initOverlay($input);
+                    $('#placewholeder-overlay-' + $input.attr('id')).show();
                 });
             }
         });
