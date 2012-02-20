@@ -7,7 +7,7 @@ $(function(){
         var placeholderText = $input.attr('placeholder');
         if (placeholderText){
             $input.parent().append(
-                '<div id="placewholeder-overlay-' + count + '"'
+                $('<div id="placewholeder-overlay-' + count + '"'
                     + 'class="placewholeder"'
                     + 'style="position: absolute;'
                         + 'z-index: 2;'
@@ -15,13 +15,13 @@ $(function(){
                         + 'top: ' + $input.position().top + ';'
                         + '">'
                     + placeholderText +
-                '</div>');
-                    //.click(function(){
-                        //debugger;
-                        //var $placewholeder = $(this);
-                        //$placewholeder.css('display: none;'); 
-                        //$input.blur();
-                    //});
+                '</div>')
+                    .click(function(){
+                        var $placewholeder = $(this);
+                        $placewholeder.css('display',  'none'); 
+                        $input.focus();
+                    })
+            );
         }
     });
 });
