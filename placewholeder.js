@@ -12,6 +12,7 @@
                     + '">'
                 + placeholderText +
             '</div>')
+                // Only works with clicks so far.
                 .click(function(){
                     var $placewholeder = $(this);
                     $placewholeder.hide();
