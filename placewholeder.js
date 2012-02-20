@@ -5,8 +5,11 @@ $(function(){
         count++;
         var placeholderText = $(this).attr('placeholder');
         if (placeholderText){
-            $(this).parent().append('<div id="placewholeder-overlay-' + count + '"'
-                + 'class="placewholeder">' + placeholderText + '</div>');
+            $(this).parent().append(
+                '<div id="placewholeder-overlay-' + count + '"'
+                    + 'class="placewholeder">'
+                    + placeholderText +
+                '</div>');
         }
     });
 });
