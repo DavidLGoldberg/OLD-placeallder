@@ -2,16 +2,13 @@
     var initOverlay = function($input) {
         var placeholderText = $input.attr('placeholder');
         $input.parent().append(
-            $('<div id="placewholeder-overlay-' + $input.attr('id') + '"'
-                + 'class="placewholeder"'
-                + 'style="position: absolute;'
-                    + 'display: block;'
-                    + 'z-index: 2;'
-                    + 'left: ' + $input.position().left + ';'
-                    + 'top: ' + $input.position().top + ';'
-                    + '">'
-                + placeholderText +
-            '</div>')
+            $input.clone()
+                .attr('id', 'placewholeder-overlay-' + $input.attr('id'))
+                .css('position', 'absolute')
+                .css('top', $input.position().top)
+                .css('left', $input.position().left)
+                .addClass('placewholeder')
+                .val($(this).attr('placeholder')
                 .click(function() {
                     $(this).hide();
                     $input.focus();
