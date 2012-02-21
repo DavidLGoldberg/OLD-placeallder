@@ -4,15 +4,16 @@
         $input.parent().append(
             $input.clone()
                 .attr('id', 'placewholeder-overlay-' + $input.attr('id'))
+                .attr('type', 'text')
                 .css('position', 'absolute')
                 .css('top', $input.position().top)
                 .css('left', $input.position().left)
                 .addClass('placewholeder')
-                .val($(this).attr('placeholder')
                 .click(function() {
                     $(this).hide();
                     $input.focus();
                 })
+                .val(placeholderText)
         );   
     };
 
