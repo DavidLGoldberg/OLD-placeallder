@@ -1,20 +1,63 @@
 (function(){
+
+    // caret position taken from: http://stackoverflow.com/questions/499126/jquery-set-cursor-position-in-text-area 
+    $.fn.setCursorPosition = function(pos) {
+        this.each(function(index, elem) {
+            if (elem.setSelectionRange) {
+                elem.setSelectionRange(pos, pos);
+            } else if (elem.createTextRange) {
+                var range = elem.createTextRange();
+                range.collapse(true);
+                range.moveEnd('character', pos);
+                range.moveStart('character', pos);
+                range.select();
+            }
+        });
+
+        return this;
+    };
+
+    var getOverlay = function($input) {
+        return $('#placeallder-overlay-' + $input.attr('id'));
+    }
+
+    var normalizeState = function($input) {
+        var $curOverlay = getOverlay($input);
+        if ($input.val() === '') {
+            $curOverlay.show();
+        }
+        else {
+            $curOverlay.hide();
+        }
+    };
+
     var initOverlay = function($input) {
         var placeholderText = $input.attr('placeholder');
-        $input.parent().append(
-            $input.clone()
-                .attr('id', 'placewholeder-overlay-' + $input.attr('id'))
-                .attr('type', 'text')
-                .css('position', 'absolute')
-                .css('top', $input.position().top)
-                .css('left', $input.position().left)
-                .addClass('placewholeder')
-                .click(function() {
-                    $(this).hide();
-                    $input.focus();
-                })
-                .val(placeholderText)
-        );   
+        var $newInput = $('<input>')
+            .attr('id', 'placeallder-overlay-' + $input.attr('id'))
+            .attr('type', 'text')
+            .css('position', 'absolute')
+            .css('top', $input.position().top)
+            .css('left', $input.position().left)
+            ////.css('caret', 'none') //Todo: find a way to prevent caret jump
+            .addClass('placeallder')
+            .click(function() {
+                $(this).setCursorPosition(0);
+            })
+            .keypress(function(e){
+                $input.focus();
+                $newInput.hide();
+                    //$input.trigger(e);
+            })
+            .val(placeholderText);
+
+        $input.parent().append($newInput);
+
+        normalizeState($input);
+
+        $input.blur(function() {
+            normalizeState($input);
+        });
     };
 
     $(function(){
@@ -23,17 +66,6 @@
             var $input = $(this);
             if ($input.attr('placeholder')){
                 initOverlay($input);
-
-                var curOverlay = $('#placewholeder-overlay-' + $input.attr('id'));
-
-                $input.blur(function() {
-                    if (!$input.val())
-                        curOverlay.show();
-                });
-
-                $input.focus(function() {
-                    curOverlay.hide();
-                });
             }
         });
     });
