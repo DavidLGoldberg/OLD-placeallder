@@ -49,7 +49,7 @@
 
         $input.bind($.browser.msie ? 'propertychange' : 'change', function(e){
             e.preventDefault();
-            normalizeState($(this));
+            normalizeState($input);
         });
 
         $input.parent().append($overlay);
