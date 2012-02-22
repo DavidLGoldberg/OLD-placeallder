@@ -33,7 +33,7 @@
 
     var initOverlay = function($input) {
         var placeholderText = $input.attr('placeholder');
-        var $newInput = $('<input>')
+        var $overlay = $('<input>')
             .attr('id', 'placeallder-overlay-' + $input.attr('id'))
             .attr('type', 'text')
             .css('position', 'absolute')
@@ -43,15 +43,15 @@
             .addClass('placeallder')
             .click(function() {
                 $(this).setCursorPosition(0);
-            })
-            .keypress(function(e){
                 $input.focus();
-                $newInput.hide();
-                    //$input.trigger(e);
             })
             .val(placeholderText);
 
-        $input.parent().append($newInput);
+        $input.keypress(function(e){
+            $overlay.hide();
+        });
+
+        $input.parent().append($overlay);
 
         normalizeState($input);
 
