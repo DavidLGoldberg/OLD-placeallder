@@ -1,6 +1,6 @@
 (function(){
 
-    // caret position taken from: http://stackoverflow.com/questions/499126/jquery-set-cursor-position-in-text-area 
+    // setCursorPosition taken from: http://stackoverflow.com/questions/499126/jquery-set-cursor-position-in-text-area 
     $.fn.setCursorPosition = function(pos) {
         this.each(function(index, elem) {
             if (elem.setSelectionRange) {
@@ -21,16 +21,6 @@
         return $('#placeallder-overlay-' + $input.attr('id'));
     }
 
-    var normalizeState = function($input) {
-        var $curOverlay = getOverlay($input);
-        if ($input.val() === '') {
-            $curOverlay.show();
-        }
-        else {
-            $curOverlay.hide();
-        }
-    };
-
     var initOverlay = function($input) {
         var placeholderText = $input.attr('placeholder');
         var $overlay = $('<input>')
@@ -47,26 +37,37 @@
             })
             .val(placeholderText);
 
-        $input.bind($.browser.msie ? 'propertychange' : 'change', function(e){
-            e.preventDefault();
-            normalizeState($input);
-        });
+        return $overlay;
+    };
 
-        $input.parent().append($overlay);
+    var bindInput = function ($input, $overlay) {
+        var normalizeState = function($input) {
+            var $curOverlay = getOverlay($input);
+            if ($input.val() === '')
+                $curOverlay.show();
+            else 
+                $curOverlay.hide();
+        };
+
+        $input
+            .bind($.browser.msie ? 'propertychange' : 'change', function(e){
+                e.preventDefault();
+                normalizeState($input);
+            })
+            .blur(function() {
+                normalizeState($input);
+            })
+            .parent().append($overlay);
 
         normalizeState($input);
-
-        $input.blur(function() {
-            normalizeState($input);
-        });
     };
 
     $(function(){
-        var $inputs = $('input');
-        $inputs.each(function(){
+        $('input').each(function(){
             var $input = $(this);
             if ($input.attr('placeholder')){
-                initOverlay($input);
+                var $overlay = initOverlay($input);
+                bindInput($input, $overlay);
             }
         });
     });
