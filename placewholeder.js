@@ -47,8 +47,9 @@
             })
             .val(placeholderText);
 
-        $input.keypress(function(e){
-            $overlay.hide();
+        $input.bind($.browser.msie ? 'propertychange' : 'change', function(e){
+            e.preventDefault();
+            normalizeState($(this));
         });
 
         $input.parent().append($overlay);
