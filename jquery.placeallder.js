@@ -1,4 +1,4 @@
-(function(){
+(function($) {
 
     // setCursorPosition taken from: http://stackoverflow.com/questions/499126/jquery-set-cursor-position-in-text-area 
     $.fn.setCursorPosition = function(pos) {
@@ -17,11 +17,26 @@
         return this;
     };
 
+    $.fn.placeallder = function(options) {
+        var settings = $.extend( {
+            'className' : 'placeallder'
+        }, options); 
+
+        return this.each(function() {
+            var $input = $(this);
+            if ($input.attr('placeholder')){
+                var $overlay = initOverlay($input, settings);
+                bindInput($input, $overlay);
+            }
+        });
+
+    };
+
     var getOverlay = function($input) {
         return $('#placeallder-overlay-' + $input.attr('id'));
     }
 
-    var initOverlay = function($input) {
+    var initOverlay = function($input, settings) {
         var placeholderText = $input.attr('placeholder');
         var $overlay = $('<input>')
             .attr('id', 'placeallder-overlay-' + $input.attr('id'))
@@ -30,7 +45,7 @@
             .css('top', $input.position().top)
             .css('left', $input.position().left)
             ////.css('caret', 'none') //Todo: find a way to prevent caret jump
-            .addClass('placeallder')
+            .addClass(settings.className)
             .click(function() {
                 $(this).setCursorPosition(0);
                 $input.focus();
@@ -62,13 +77,4 @@
         normalizeState($input);
     };
 
-    $(function(){
-        $('input').each(function(){
-            var $input = $(this);
-            if ($input.attr('placeholder')){
-                var $overlay = initOverlay($input);
-                bindInput($input, $overlay);
-            }
-        });
-    });
-})();
+})(jQuery);
