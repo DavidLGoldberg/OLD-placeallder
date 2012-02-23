@@ -23,13 +23,15 @@
         }, options); 
 
         return this.each(function() {
+            if (this.placeholder && 'placeholder' in document.createElement(this.tagName))
+                return;
+            
             var $input = $(this);
             if ($input.attr('placeholder')){
                 var $overlay = initOverlay($input, settings);
                 bindInput($input, $overlay);
             }
         });
-
     };
 
     var getOverlay = function($input) {
