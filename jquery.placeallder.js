@@ -23,8 +23,8 @@
         }, options); 
 
         return this.each(function() {
-            if (this.placeholder && 'placeholder' in document.createElement(this.tagName))
-                return;
+            //if (this.placeholder && 'placeholder' in document.createElement(this.tagName))
+            //    return;
             
             var $input = $(this);
             if ($input.attr('placeholder')){
@@ -52,10 +52,6 @@
             .css('left', $input.position().left)
             ////.css('caret', 'none') //Todo: find a way to prevent caret jump
             .addClass(settings.className)
-            .click(function() {
-                $(this).setCursorPosition(0);
-                $input.focus();
-            })
             .val(placeholderText);
 
         if (isOperaIconInput) {
@@ -68,6 +64,12 @@
     };
 
     var bindInput = function ($input, $overlay) {
+
+        var toggleOverlay = function($input, $overlay) {
+            //$overlay.setCursorPosition(0);
+            $input.focus();
+        };
+
         var normalizeState = function($input) {
             var $curOverlay = getOverlay($input);
             if ($input.val() === '')
@@ -75,6 +77,8 @@
             else 
                 $curOverlay.hide();
         };
+
+        $overlay.bind('click', toggleOverlay($input, $overlay))
 
         $input
             .bind($.browser.msie ? 'propertychange' : 'change', function(e){
