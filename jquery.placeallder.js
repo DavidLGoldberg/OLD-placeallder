@@ -39,18 +39,17 @@
     }
 
     var initOverlay = function($input, settings) {
+        // handle special opera field case idea from: https://github.com/miketaylr/jQuery-html5-placeholder/blob/master/html5placeholder.jquery.js
+        var isOperaIconInput = $.browser.opera && $.browser.version < 10.5
+            && ($input.get(0).type == 'email' || $input.get(0).type == 'url');
         var placeholderText = $input.attr('placeholder');
+
         var $overlay = $('<input>')
             .attr('id', 'placeallder-overlay-' + $input.attr('id'))
             .attr('type', 'text')
             .css('position', 'absolute')
             .css('top', $input.position().top)
-            // handle special opera field case idea from: https://github.com/miketaylr/jQuery-html5-placeholder/blob/master/html5placeholder.jquery.js
-            .css('left', $.browser.opera 
-                && $.browser.version < 10.5
-                && (this.type == 'email' || this.type == 'url')
-                    ? '11%'
-                    : $input.position().left)
+            .css('left', $input.position().left)
             ////.css('caret', 'none') //Todo: find a way to prevent caret jump
             .addClass(settings.className)
             .click(function() {
@@ -58,6 +57,12 @@
                 $input.focus();
             })
             .val(placeholderText);
+
+        if (isOperaIconInput) {
+            $overlay
+                .css('border-left-width', 0)
+                .css('left', $input.position().left + 22);
+        }
 
         return $overlay;
     };
