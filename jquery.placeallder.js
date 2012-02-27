@@ -45,7 +45,12 @@
             .attr('type', 'text')
             .css('position', 'absolute')
             .css('top', $input.position().top)
-            .css('left', $input.position().left)
+            // handle special opera field case idea from: https://github.com/miketaylr/jQuery-html5-placeholder/blob/master/html5placeholder.jquery.js
+            .css('left', $.browser.opera 
+                && $.browser.version < 10.5
+                && (this.type == 'email' || this.type == 'url')
+                    ? '11%'
+                    : $input.position().left)
             ////.css('caret', 'none') //Todo: find a way to prevent caret jump
             .addClass(settings.className)
             .click(function() {
