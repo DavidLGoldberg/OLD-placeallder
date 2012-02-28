@@ -34,10 +34,6 @@
         });
     };
 
-    var getOverlay = function($input) {
-        return $('#placeallder-overlay-' + $input.attr('id'));
-    }
-
     var initOverlay = function($input, settings) {
         // handle special opera field case idea from: https://github.com/miketaylr/jQuery-html5-placeholder/blob/master/html5placeholder.jquery.js
         var isOperaIconInput = $.browser.opera && $.browser.version < 10.5
@@ -70,12 +66,11 @@
             $input.focus();
         };
 
-        var normalizeState = function($input) {
-            var $curOverlay = getOverlay($input);
+        var normalizeState = function($input, $overlay) {
             if ($input.val() === '')
-                $curOverlay.show();
+                $overlay.show();
             else 
-                $curOverlay.hide();
+                $overlay.hide();
         };
 
         $overlay.bind('click', function() {
@@ -85,14 +80,14 @@
         $input
             .bind($.browser.msie ? 'propertychange' : 'change', function(e){
                 e.preventDefault();
-                normalizeState($input);
+                normalizeState($input, $overlay);
             })
             .blur(function() {
-                normalizeState($input);
+                normalizeState($input, $overlay);
             })
             .parent().append($overlay);
 
-        normalizeState($input);
+        normalizeState($input, $overlay);
     };
 
 })(jQuery);
