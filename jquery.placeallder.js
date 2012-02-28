@@ -23,8 +23,8 @@
         }, options); 
 
         return this.each(function() {
-            //if (this.placeholder && 'placeholder' in document.createElement(this.tagName))
-            //    return;
+            if (this.placeholder && 'placeholder' in document.createElement(this.tagName))
+                return;
             
             var $input = $(this);
             if ($input.attr('placeholder')){
@@ -66,7 +66,7 @@
     var bindInput = function ($input, $overlay) {
 
         var toggleOverlay = function($input, $overlay) {
-            //$overlay.setCursorPosition(0);
+            $overlay.setCursorPosition(0);
             $input.focus();
         };
 
@@ -78,7 +78,9 @@
                 $curOverlay.hide();
         };
 
-        $overlay.bind('click', toggleOverlay($input, $overlay))
+        $overlay.bind('click', function() {
+            toggleOverlay($input, $overlay);
+        });
 
         $input
             .bind($.browser.msie ? 'propertychange' : 'change', function(e){
