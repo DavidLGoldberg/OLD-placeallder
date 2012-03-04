@@ -1,5 +1,18 @@
 (function($) {
 
+    // focusNextInputField modified from: http://jqueryminute.com/set-focus-to-the-next-input-field-with-jquery/
+    $.fn.focusPreviousInputField = function() {
+        log('focusPreviousInputField');
+        return this.each(function() {
+            var fields = $(this).closest('form, body').find('button,input[type!="hidden"],textarea,select');
+            var index = fields.index(this);
+            if (index > -1 && (index - 1) >= 0) {
+                fields.eq(index - 2).focus();
+            }
+            return false;
+        });
+    };
+
     // setCursorPosition taken from: http://stackoverflow.com/questions/499126/jquery-set-cursor-position-in-text-area 
     $.fn.setCursorPosition = function(pos) {
         this.each(function(index, elem) {
@@ -63,15 +76,6 @@
 
     var bindInput = function ($input, $overlay) {
 
-        var shiftTab = function ($overlay) {
-            log('shiftTab');
-            var index = $overlay.index(this);
-            log(index);
-            var prevIndex = index - 2;
-            log(prevIndex);
-            $(':input:eq(' + prevIndex + ')').focus();
-        };
-
         var showOverlay = function($input, $overlay) {
             log('showOverlay');
             $overlay
@@ -103,12 +107,6 @@
                 log('overlay: click');
                 normalizeState($input, $overlay);
             })
-            .blur(function(){
-                log('overlay: blur');
-                //var curIndex = $overlay.index(this);
-                //console.log(curIndex);
-                //$(':input:eq(' + (curIndex + 1) + ')').focus();
-            })
             .bind($.browser.msie ? 'propertychange' : 'keypress', function(e) {
                 log('overlay: propertychange or keypress');
                 showInput($input, $overlay);
@@ -121,9 +119,9 @@
                     e.preventDefault();
                 }
 
-                var isBackwardsTab = (e.keyCode === 9 && e.shiftKey);
+                var isBackwardsTab = (e.shiftKey && e.keyCode === 9);
                 if (isBackwardsTab) {
-                    shiftTab($overlay);
+                    $overlay.focusPreviousInputField();
                 }
                 else { // this might need to be removed... might need to always normalize.
                     normalizeState($input, $overlay);
