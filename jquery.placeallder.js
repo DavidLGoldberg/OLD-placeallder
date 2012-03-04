@@ -23,14 +23,16 @@
         }, options); 
 
         return this.each(function() {
-            if (this.placeholder && 'placeholder' in document.createElement(this.tagName))
-                return;
+            //if (this.placeholder && 'placeholder' in document.createElement(this.tagName))
+                //return;
             
             var $input = $(this);
-            if ($input.attr('placeholder')){
+            if ($input.attr('placeholder')) {
                 var $overlay = initOverlay($input, settings);
                 bindInput($input, $overlay);
             }
+
+            //Todo: remove overlays from input submits?
         });
     };
 
@@ -61,33 +63,56 @@
 
     var bindInput = function ($input, $overlay) {
 
-        var toggleOverlay = function($input, $overlay) {
-            $overlay.setCursorPosition(0);
-            $input.focus();
+        var showOverlay = function($input, $overlay) {
+            log('showOverlay');
+            $overlay
+                //.setCursorPosition(0) // needs 2 set cursors!
+                .show()
+                .setCursorPosition(0);
+        };
+
+        var showInput = function($input, $overlay) {
+            $overlay.hide();
+            $input.show();
         };
 
         var normalizeState = function($input, $overlay) {
-            if ($input.val() === '')
-                $overlay.show();
-            else 
-                $overlay.hide();
+            log('***normalizeState');
+            if ($input.val() === '') { 
+                showOverlay($input, $overlay);
+                // Todo: set up a one time readjust of tab index ? rather not have to do this...
+            }
+            else {
+                showInput($input, $overlay);
+            }
         };
 
-        $overlay.bind('click', function() {
-            toggleOverlay($input, $overlay);
-        });
+        $overlay
+            .click(function() {
+                log('overlay: click');
+                normalizeState($input, $overlay);
+            })
+            .blur(function(){
+                log('overlay: blur');
+                //var curIndex = $overlay.index(this);
+                //console.log(curIndex);
+                //$(':input:eq(' + (curIndex + 1) + ')').focus();
+            })
+            .bind($.browser.msie ? 'propertychange' : 'keypress', function(e) { // add back change and blur?
+                log('overlay: propertychange or keypress');
+                $overlay.hide();
+                $input.focus();
+            });
 
         $input
-            .bind($.browser.msie ? 'propertychange' : 'change', function(e){
-                e.preventDefault();
+            .bind($.browser.msie ? 'propertychange' : 'keyup', function(e) { // add back change and blur?
+                log('input: propertychange or keyup');
+                if ($.browser.msie) { 
+                    e.preventDefault();
+                }
                 normalizeState($input, $overlay);
             })
-            .blur(function() {
-                normalizeState($input, $overlay);
-            })
-            .parent().append($overlay);
-
-        normalizeState($input, $overlay);
+            .after($overlay);
     };
 
 })(jQuery);

@@ -4,9 +4,15 @@
             Placeallder Test
         </title>
         <script src="dependencies/jquery-1.7.1.js"></script>
+        <script>
+            var log = function(str) {
+                if (typeof console !== "undefined" && typeof console.log !== "undefined")
+                    console.log(str);
+            };
+        </script>
         <style>
             .placeallder {
-                color: gray;
+                color: red;
             }
         </style>
     </head>
