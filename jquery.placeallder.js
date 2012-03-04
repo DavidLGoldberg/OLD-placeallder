@@ -66,18 +66,20 @@
         var showOverlay = function($input, $overlay) {
             log('showOverlay');
             $overlay
-                //.setCursorPosition(0) // needs 2 set cursors!
                 .show()
                 .setCursorPosition(0);
         };
 
         var showInput = function($input, $overlay) {
+            log('showInput');
             $overlay.hide();
-            $input.show();
+            $input
+                .show()
+                .focus();
         };
 
         var normalizeState = function($input, $overlay) {
-            log('***normalizeState');
+            log('***normalizeState***');
             if ($input.val() === '') { 
                 showOverlay($input, $overlay);
                 // Todo: set up a one time readjust of tab index ? rather not have to do this...
@@ -100,8 +102,7 @@
             })
             .bind($.browser.msie ? 'propertychange' : 'keypress', function(e) { // add back change and blur?
                 log('overlay: propertychange or keypress');
-                $overlay.hide();
-                $input.focus();
+                showInput($input, $overlay);
             });
 
         $input
