@@ -100,13 +100,13 @@
                 //console.log(curIndex);
                 //$(':input:eq(' + (curIndex + 1) + ')').focus();
             })
-            .bind($.browser.msie ? 'propertychange' : 'keypress', function(e) { // add back change and blur?
+            .bind($.browser.msie ? 'propertychange' : 'keypress', function(e) {
                 log('overlay: propertychange or keypress');
                 showInput($input, $overlay);
             });
 
         $input
-            .bind($.browser.msie ? 'propertychange' : 'keyup', function(e) { // add back change and blur?
+            .bind($.browser.msie ? 'propertychange' : 'keyup', function(e) { // Note: needs keyup for backspace.
                 log('input: propertychange or keyup');
                 if ($.browser.msie) { 
                     e.preventDefault();
