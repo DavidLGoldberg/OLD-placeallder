@@ -115,9 +115,7 @@
         $input
             .bind($.browser.msie ? 'propertychange' : 'keyup', function(e) { // Note: needs keyup for backspace.
                 log('input: propertychange or keyup');
-                if ($.browser.msie) { 
-                    e.preventDefault();
-                }
+                e.preventDefault();
 
                 var isBackwardsTab = (e.shiftKey && e.keyCode === 9);
                 if (isBackwardsTab) {
