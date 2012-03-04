@@ -95,7 +95,6 @@
             log('***normalizeState***');
             if ($input.val() === '') { 
                 showOverlay($input, $overlay);
-                // Todo: set up a one time readjust of tab index ? rather not have to do this...
             }
             else {
                 showInput($input, $overlay);
