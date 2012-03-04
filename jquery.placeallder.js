@@ -63,6 +63,15 @@
 
     var bindInput = function ($input, $overlay) {
 
+        var shiftTab = function ($overlay) {
+            log('shiftTab');
+            var index = $overlay.index(this);
+            log(index);
+            var prevIndex = index - 2;
+            log(prevIndex);
+            $(':input:eq(' + prevIndex + ')').focus();
+        };
+
         var showOverlay = function($input, $overlay) {
             log('showOverlay');
             $overlay
@@ -111,7 +120,14 @@
                 if ($.browser.msie) { 
                     e.preventDefault();
                 }
-                normalizeState($input, $overlay);
+
+                var isBackwardsTab = (e.keyCode === 9 && e.shiftKey);
+                if (isBackwardsTab) {
+                    shiftTab($overlay);
+                }
+                else { // this might need to be removed... might need to always normalize.
+                    normalizeState($input, $overlay);
+                }
             })
             .after($overlay);
     };
