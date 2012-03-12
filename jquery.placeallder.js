@@ -4,10 +4,21 @@
     $.fn.focusPreviousInputField = function() {
         log('focusPreviousInputField');
         return this.each(function() {
-            var fields = $(this).closest('form, body').find('button,input[type!="hidden"],textarea,select');
+            var fields = $(this).closest('form, body').find('button,input,textarea,select');
             var index = fields.index(this);
             if (index > -1 && (index - 1) >= 0) {
                 fields.eq(index - 2).focus();
+            }
+            return false;
+        });
+    };
+
+    $.fn.focusNextInputField = function() {
+        return this.each(function() {
+            var fields = $(this).closest('form, body').find('button,input,textarea,select');
+            var index = fields.index( this );
+            if ( index > -1 && ( index + 1 ) < fields.length ) {
+                fields.eq( index + 1 ).focus();
             }
             return false;
         });
@@ -116,9 +127,11 @@
                 log('input: propertychange or keyup');
                 e.preventDefault();
 
-                var isBackwardsTab = (e.shiftKey && e.keyCode === 9);
-                if (isBackwardsTab) {
-                    $overlay.focusPreviousInputField();
+                if (e.shiftKey && e.keyCode === 9) { // shift tab
+                    $input.focusPreviousInputField().focusPreviousInputField();
+                }
+                else if (e.keyCode === 9) { // tab
+                    $input.focusNextInputField().focusNextInputField();
                 }
                 else { // this might need to be removed... might need to always normalize.
                     normalizeState($input, $overlay);
