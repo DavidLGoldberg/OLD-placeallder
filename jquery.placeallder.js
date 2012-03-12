@@ -16,9 +16,9 @@
     $.fn.focusNextInputField = function() {
         return this.each(function() {
             var fields = $(this).closest('form, body').find('button,input,textarea,select');
-            var index = fields.index( this );
-            if ( index > -1 && ( index + 1 ) < fields.length ) {
-                fields.eq( index + 1 ).focus();
+            var index = fields.index(this);
+            if (index > -1 && (index + 1) < fields.length ) {
+                fields.eq(index + 1).focus();
             }
             return false;
         });
